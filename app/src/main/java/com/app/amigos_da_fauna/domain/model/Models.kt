@@ -1,5 +1,7 @@
 package com.app.amigos_da_fauna.domain.model
 
+import kotlinx.serialization.Serializable
+
 data class Animal(
     val id: Int,
     val name: String,
@@ -27,6 +29,7 @@ data class User(
     val email: String,
 )
 
+@Serializable
 data class UserProfile(
     val name: String,
     val email: String,
@@ -48,6 +51,7 @@ data class QuizAnswerResult(
     val answerDetails: String?,
 )
 
+@Serializable
 data class QuizResultEntry(
     val animalId: Int,
     val hits: Int,
