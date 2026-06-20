@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.amigos_da_fauna.domain.model.Animal
 import com.app.amigos_da_fauna.domain.repository.AnimalRepository
+import com.app.amigos_da_fauna.util.getIntNavArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +26,7 @@ class AnimalDetailViewModel @Inject constructor(
     private val animalRepository: AnimalRepository,
 ) : ViewModel() {
 
-    private val animalId: Int = savedStateHandle.get<String>("animalId")?.toIntOrNull() ?: -1
+    private val animalId: Int = savedStateHandle.getIntNavArg("animalId")
 
     private val _uiState = MutableStateFlow(AnimalDetailUiState())
     val uiState: StateFlow<AnimalDetailUiState> = _uiState.asStateFlow()

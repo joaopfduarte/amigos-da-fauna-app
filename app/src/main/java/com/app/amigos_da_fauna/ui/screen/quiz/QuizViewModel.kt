@@ -7,6 +7,8 @@ import com.app.amigos_da_fauna.domain.model.QuizAnswerResult
 import com.app.amigos_da_fauna.domain.model.QuizQuestion
 import com.app.amigos_da_fauna.domain.model.QuizResultEntry
 import com.app.amigos_da_fauna.domain.repository.QuizRepository
+import com.app.amigos_da_fauna.util.currentIsoTimestamp
+import com.app.amigos_da_fauna.util.getIntNavArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.time.Instant
 import javax.inject.Inject
 
 data class QuizUiState(
@@ -51,7 +52,7 @@ class QuizViewModel @Inject constructor(
     private val quizRepository: QuizRepository,
 ) : ViewModel() {
 
-    private val animalId: Int = savedStateHandle.get<String>("animalId")?.toIntOrNull() ?: -1
+    private val animalId: Int = savedStateHandle.getIntNavArg("animalId")
 
     private val _uiState = MutableStateFlow(QuizUiState())
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
@@ -190,7 +191,7 @@ class QuizViewModel @Inject constructor(
                 hits = state.hits,
                 fails = state.fails,
                 percentage = percentage,
-                date = Instant.now().toString(),
+                date = currentIsoTimestamp(),
             ),
         )
         resultSaved = true
