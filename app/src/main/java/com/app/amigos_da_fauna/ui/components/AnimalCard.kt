@@ -63,10 +63,18 @@ fun AnimalCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                StatItem(label = "Altura", value = animal.height)
-                StatItem(label = "Peso", value = animal.weight)
+                StatItem(
+                    label = "Altura",
+                    value = animal.height,
+                    modifier = Modifier.weight(1f),
+                )
+                StatItem(
+                    label = "Peso",
+                    value = animal.weight,
+                    modifier = Modifier.weight(1f),
+                )
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -86,10 +94,19 @@ fun AnimalCard(
 }
 
 @Composable
-private fun StatItem(label: String, value: String) {
+private fun StatItem(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
     val colors = FaunaTheme.colors
-    Column {
+    Column(modifier = modifier) {
         Text(text = label.uppercase(), color = colors.textMuted, fontWeight = FontWeight.Bold)
-        Text(text = value, color = colors.text, fontWeight = FontWeight.SemiBold)
+        Text(
+            text = value,
+            color = colors.text,
+            fontWeight = FontWeight.SemiBold,
+            softWrap = true,
+        )
     }
 }
