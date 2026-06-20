@@ -1,0 +1,5 @@
+## SDK path (gerado pelo Android Studio)
+sdk.dir=/path/to/Android/sdk
+
+## Chave Google Maps (obrigatória para o ecrã Mapa)
+MAPS_API_KEY=sua_chave_aqui
