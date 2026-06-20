@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">amigos-da-fauna</string>
+    <string name="app_name">Amigos da Fauna</string>
+    <string name="app_header">🌿 Amigos da fauna</string>
+    <string name="nav_home">Início</string>
+    <string name="nav_map">Mapa</string>
+    <string name="nav_profile">Perfil</string>
+    <string name="nav_about">Sobre</string>
 </resources>
