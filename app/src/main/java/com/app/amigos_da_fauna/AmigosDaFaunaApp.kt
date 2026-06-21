@@ -19,7 +19,19 @@ class AmigosDaFaunaApp : Application(), SingletonImageLoader.Factory {
     override fun newImageLoader(context: PlatformContext): ImageLoader {
         return ImageLoader.Builder(context)
             .components {
-                add(OkHttpNetworkFetcherFactory(callFactory = OkHttpClient()))
+                add(OkHttpNetworkFetcherFactory(callFactory = createImageHttpClient()))
+            }
+            .build()
+    }
+
+    private fun createImageHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                chain.proceed(
+                    chain.request().newBuilder()
+                        .header("User-Agent", "AmigosDaFauna/1.0 (Android)")
+                        .build(),
+                )
             }
             .build()
     }

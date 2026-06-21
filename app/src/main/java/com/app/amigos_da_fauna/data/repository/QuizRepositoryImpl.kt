@@ -1,7 +1,7 @@
 package com.app.amigos_da_fauna.data.repository
 
 import com.app.amigos_da_fauna.data.local.PreferencesDataStore
-import com.app.amigos_da_fauna.data.remote.ApiService
+import com.app.amigos_da_fauna.data.remote.FaunaApi
 import com.app.amigos_da_fauna.data.remote.dto.QuizAnswerRequestDto
 import com.app.amigos_da_fauna.data.remote.dto.toDomain
 import com.app.amigos_da_fauna.domain.model.QuizAnswerResult
@@ -13,16 +13,16 @@ import javax.inject.Singleton
 
 @Singleton
 class QuizRepositoryImpl @Inject constructor(
-    private val apiService: ApiService,
+    private val faunaApi: FaunaApi,
     private val preferencesDataStore: PreferencesDataStore,
 ) : QuizRepository {
 
     override suspend fun getQuestions(animalId: Int): Result<List<QuizQuestion>> = runCatching {
-        apiService.getQuizQuestions(animalId).map { it.toDomain() }
+        faunaApi.getQuizQuestions(animalId).map { it.toDomain() }
     }
 
     override suspend fun submitAnswer(questionCode: Int, userAnswer: Int): Result<QuizAnswerResult> = runCatching {
-        apiService.submitQuizAnswer(QuizAnswerRequestDto(questionCode, userAnswer)).toDomain()
+        faunaApi.submitQuizAnswer(QuizAnswerRequestDto(questionCode, userAnswer)).toDomain()
     }
 
     override suspend fun saveQuizResult(entry: QuizResultEntry) {

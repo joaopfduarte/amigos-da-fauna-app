@@ -28,6 +28,36 @@ Projeto de educação ambiental sobre a biodiversidade da Mata Atlântica:
 
 Backend: `https://api-dm-69db35e2f2d0.herokuapp.com`
 
+## Build Variants
+
+O projeto usa product flavors para separar desenvolvimento com mocks da API real:
+
+| Variante | API backend | Application ID |
+|---|---|---|
+| `devDebug` / `devRelease` | Mock local (`MockFaunaApi`) | `com.app.amigos_da_fauna.dev` |
+| `prodDebug` / `prodRelease` | API Heroku real | `com.app.amigos_da_fauna` |
+
+### Desenvolvimento com mocks
+
+```bash
+./gradlew installDevDebug
+```
+
+Credenciais de teste do mock:
+
+- **Email:** `dev@test.com`
+- **Senha:** `123456`
+
+O flavor `dev` simula paginação, autenticação e quizzes sem conexão com o backend. **Google Maps e localização do dispositivo continuam usando as APIs reais do Google** — apenas as chamadas ao backend Heroku são mockadas.
+
+> **Google Maps:** o flavor `dev` usa o package `com.app.amigos_da_fauna.dev`. Se a chave Maps tiver restrição por package no Google Cloud Console, adicione esse package às restrições.
+
+### Produção / API real
+
+```bash
+./gradlew installProdDebug
+```
+
 ## Como executar
 
 1. Abra o projeto no Android Studio
@@ -37,10 +67,11 @@ Backend: `https://api-dm-69db35e2f2d0.herokuapp.com`
 MAPS_API_KEY=sua_chave_aqui
 ```
 
-3. Sincronize o Gradle e execute no emulador ou dispositivo (minSdk 24)
+3. Selecione a variante desejada (`devDebug` ou `prodDebug`) e execute no emulador ou dispositivo (minSdk 24)
 
 ```bash
-./gradlew assembleDebug
+./gradlew assembleDevDebug   # mocks
+./gradlew assembleProdDebug  # API real
 ```
 
 ## Estrutura
@@ -48,10 +79,14 @@ MAPS_API_KEY=sua_chave_aqui
 ```
 app/src/main/java/com/app/amigos_da_fauna/
 ├── data/          # remote, local, repository
+│   └── remote/mock/   # MockFaunaApi e fixtures (dev)
 ├── domain/        # models, repository interfaces
 ├── ui/            # screens, navigation, theme, components
-├── di/            # módulos Hilt
+├── di/            # módulos Hilt (main)
 └── util/          # share, location, merge
+
+app/src/dev/       # DevNetworkModule — injeta MockFaunaApi
+app/src/prod/      # ProdNetworkModule — injeta RetrofitFaunaApi
 ```
 
 ## Deep links

@@ -1,7 +1,7 @@
 package com.app.amigos_da_fauna.data.repository
 
 import com.app.amigos_da_fauna.data.local.PreferencesDataStore
-import com.app.amigos_da_fauna.data.remote.ApiService
+import com.app.amigos_da_fauna.data.remote.FaunaApi
 import com.app.amigos_da_fauna.data.remote.dto.LoginRequestDto
 import com.app.amigos_da_fauna.data.remote.dto.RegisterRequestDto
 import com.app.amigos_da_fauna.data.remote.dto.toDomain
@@ -14,20 +14,20 @@ import javax.inject.Singleton
 
 @Singleton
 class AnimalRepositoryImpl @Inject constructor(
-    private val apiService: ApiService,
+    private val faunaApi: FaunaApi,
     private val preferencesDataStore: PreferencesDataStore,
 ) : AnimalRepository {
 
     override suspend fun getAnimalsPage(offset: Int): Result<List<Animal>> = runCatching {
-        apiService.getAnimals(offset).map { it.toDomain() }
+        faunaApi.getAnimals(offset).map { it.toDomain() }
     }
 
     override suspend fun getAnimalById(id: Int): Result<Animal> = runCatching {
-        apiService.getAnimalById(id).toDomain()
+        faunaApi.getAnimalById(id).toDomain()
     }
 
     override suspend fun getLocationsPage(offset: Int): Result<List<AnimalLocation>> = runCatching {
-        apiService.getAnimalLocations(offset).map { it.toDomain() }
+        faunaApi.getAnimalLocations(offset).map { it.toDomain() }
     }
 
     override suspend fun getCachedAnimals(): List<Animal> {

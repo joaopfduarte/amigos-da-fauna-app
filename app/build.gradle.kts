@@ -34,6 +34,21 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("Boolean", "USE_MOCK_API", "true")
+        }
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("Boolean", "USE_MOCK_API", "false")
+        }
+    }
+
     buildTypes {
         release {
             optimization {

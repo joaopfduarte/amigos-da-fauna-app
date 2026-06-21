@@ -2,7 +2,7 @@ package com.app.amigos_da_fauna.data.repository
 
 import com.app.amigos_da_fauna.data.local.PreferencesDataStore
 import com.app.amigos_da_fauna.data.local.TokenStorage
-import com.app.amigos_da_fauna.data.remote.ApiService
+import com.app.amigos_da_fauna.data.remote.FaunaApi
 import com.app.amigos_da_fauna.data.remote.dto.LoginRequestDto
 import com.app.amigos_da_fauna.data.remote.dto.RegisterRequestDto
 import com.app.amigos_da_fauna.domain.model.UserProfile
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
-    private val apiService: ApiService,
+    private val faunaApi: FaunaApi,
     private val tokenStorage: TokenStorage,
     private val preferencesDataStore: PreferencesDataStore,
 ) : AuthRepository {
@@ -34,7 +34,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun login(email: String, password: String): Result<Unit> = runCatching {
-        val response = apiService.login(LoginRequestDto(email.trim(), password))
+        val response = faunaApi.login(LoginRequestDto(email.trim(), password))
         tokenStorage.saveToken(response.accessToken)
 
         val existing = preferencesDataStore.getUserProfile()
@@ -52,7 +52,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun register(name: String, email: String, password: String): Result<Unit> = runCatching {
-        apiService.register(RegisterRequestDto(name.trim(), email.trim(), password))
+        faunaApi.register(RegisterRequestDto(name.trim(), email.trim(), password))
         val profile = UserProfile(name = name.trim(), email = email.trim())
         preferencesDataStore.setUserProfile(profile)
         _userProfile.value = profile

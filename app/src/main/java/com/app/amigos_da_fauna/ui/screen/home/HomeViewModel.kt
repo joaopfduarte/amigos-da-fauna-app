@@ -2,6 +2,7 @@ package com.app.amigos_da_fauna.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.amigos_da_fauna.BuildConfig
 import com.app.amigos_da_fauna.domain.model.Animal
 import com.app.amigos_da_fauna.domain.repository.AnimalRepository
 import com.app.amigos_da_fauna.util.mergeById
@@ -41,7 +42,11 @@ class HomeViewModel @Inject constructor(
 
     private fun bootstrap() {
         viewModelScope.launch {
-            val cached = animalRepository.getCachedAnimals()
+            val cached = if (BuildConfig.USE_MOCK_API) {
+                emptyList()
+            } else {
+                animalRepository.getCachedAnimals()
+            }
             val history = animalRepository.getSearchHistory()
             _uiState.update {
                 it.copy(
